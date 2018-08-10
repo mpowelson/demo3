@@ -122,7 +122,7 @@ int main(int argc, char** argv){
 
 
         //Exclude unsupported filetypes
-        if (filepath.substr(filepath.size()-3) == "STL" ||  filepath.substr(filepath.size()-3) == "stl" ){
+        if (filepath.substr(filepath.size()-3) == "STL" ||  filepath.substr(filepath.size()-3) == "dae" ){
           auto mesh_ptr = gl_depth_sim::loadMesh(getfullpath(filepath));
           if (!mesh_ptr)
           {
@@ -135,6 +135,7 @@ int main(int argc, char** argv){
           }
           auto mesh_loc = Eigen::Affine3d::Identity();
           tf::StampedTransform meshTransform;
+          listener.waitForTransform("/world","/" + linkName, ros::Time(0), ros::Duration(5));
           listener.lookupTransform("/world", "/" + linkName, ros::Time(0), meshTransform);
           tf::transformTFToEigen(meshTransform,mesh_loc);
 //          mesh_loc.matrix() << 1, 0, 0, 0,             // Replace this with info from the URDF
@@ -150,14 +151,11 @@ int main(int argc, char** argv){
 
 
 
-  const auto start = std::chrono::steady_clock::now();
   pcl::PointCloud<pcl::PointXYZ> cloud;
   cloud.header.frame_id = camera_frame;
 
   while (ros::ok())
   {
-    double dt = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
-
 
     //Step 1: Get camera tranform and render point cloud
     tf::StampedTransform camera_transform;

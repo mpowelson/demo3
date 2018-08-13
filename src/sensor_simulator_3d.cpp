@@ -142,7 +142,7 @@ int main(int argc, char** argv){
 //              0, 1, 0, 0,
 //              0, 0, 1, 0.77153,
 //              0, 0, 0, 1;
-          sim.add(*mesh_ptr, mesh_loc);
+          sim.add(linkName, *mesh_ptr, mesh_loc);
         }
 
       }}

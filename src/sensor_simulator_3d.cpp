@@ -149,6 +149,55 @@ int main(int argc, char** argv){
     std::cout << std::endl;
   }
 
+  // mostly copy pasted from "Creating a Cube Mesh in Unity3d"
+  std::vector<unsigned int> indices =
+  {
+    0, 2, 1,
+    0, 3, 2,
+    2, 3, 4,
+    2, 4, 5,
+    1, 2, 5,
+    1, 5, 6,
+    0, 7, 4,
+    0, 4, 3,
+    5, 4, 7,
+    5, 7, 6,
+    0, 6, 7,
+    0, 1, 6
+  };
+  gl_depth_sim::EigenAlignedVec<Eigen::Vector3f> vertices =
+  {
+    Eigen::Vector3f(-0.5, -0.5, -0.5),
+    Eigen::Vector3f(0.5, -0.5, -0.5),
+    Eigen::Vector3f(0.5, 0.5, -0.5),
+    Eigen::Vector3f(-0.5, 0.5, -0.5),
+    Eigen::Vector3f(-0.5, 0.5, 0.5),
+    Eigen::Vector3f(0.5, 0.5, 0.5),
+    Eigen::Vector3f(0.5, -0.5, 0.5),
+    Eigen::Vector3f(-0.5, -0.5, 0.5),
+  };
+
+  double box_side;
+  nh.getParam("box_side", box_side);
+  for (std::size_t i = 0; i < vertices.size(); i++)
+  {
+       vertices[i] *= box_side;
+  }
+  gl_depth_sim::Mesh box_mesh(vertices, indices);
+
+  std::string box_parent_link;
+  double box_x, box_y;
+  nh.getParam("box_parent_link", box_parent_link);
+  nh.getParam("box_x", box_x);
+  nh.getParam("box_y", box_y);
+
+  tf::StampedTransform world_to_box_tf;
+  Eigen::Affine3d world_to_box;
+  listener.lookupTransform("world", box_parent_link, ros::Time(0.0), world_to_box_tf);
+  tf::transformTFToEigen(world_to_box_tf, world_to_box);
+  world_to_box.translation() += Eigen::Vector3d(box_x, box_y, box_side/2.0);
+  sim.add(box_mesh, world_to_box);
+
 
 
   pcl::PointCloud<pcl::PointXYZ> cloud;

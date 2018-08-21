@@ -18,6 +18,9 @@ find_package(catkin REQUIRED COMPONENTS
   tesseract_planning
 )
 
+include_directories(include)
+
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -108,9 +111,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES sensor_simulator_3d
-#  CATKIN_DEPENDS roscpp urdf tf_conversions
+INCLUDE_DIRS include
+#LIBRARIES
+CATKIN_DEPENDS roscpp urdf tf_conversions tesseract_planning
 #  DEPENDS system_lib
 )
 

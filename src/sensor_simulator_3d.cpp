@@ -122,7 +122,8 @@ int main(int argc, char** argv){
 
 
         //Exclude unsupported filetypes
-        if (filepath.substr(filepath.size()-3) == "STL" ||  filepath.substr(filepath.size()-3) == "dae" ){
+        //dae files are still broken as of 8/21/18. The internal transforms are not properly imported by assimp in gl_depth_sim
+        if (filepath.substr(filepath.size()-3) == "STL" ||  filepath.substr(filepath.size()-3) == "stl" ){
           auto mesh_ptr = gl_depth_sim::loadMesh(getfullpath(filepath));
           if (!mesh_ptr)
           {

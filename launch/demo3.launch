@@ -39,6 +39,6 @@
 
     <!-- Launch visualization -->
     <node if="$(arg rviz)" pkg="rviz" type="rviz" name="demo3_viz"
-        args="-d $(find demo3)/launch/demo3.rviz" />
+        args="-d $(find demo3)/config/demo3.rviz" />
 
 </launch>
